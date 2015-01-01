@@ -1,6 +1,5 @@
 %{
 #include "prp_parser.h"
-#define DEBUG_BISON
 %}
 
 %union {
@@ -15,20 +14,18 @@ char *sval;
 %token LBRAC 
 %token RBRAC 
 %token ERROR
+%expect 2
 
 %%
 
-body: init body end   ;
+main: init body end   ;
 
-body: | divs
-| events
-| divs events
-| events divs
-;
+body: patterns;
 
-divs : div | divs div;
-div : mul events close | mul div close | mul div events close  | mul events div close
-;
+
+patterns: pattern | patterns pattern ;
+pattern: mul pattern close | events;
+
 events: event | events event 
 ;
 
@@ -77,5 +74,6 @@ end : RBRAC {
 
 void yyerror(const char *s)
 {
-
+    fprintf(stderr, "%s: sorry this can't be more useful\n", s);
+    prp_destroy(&PRP_GD); 
 }

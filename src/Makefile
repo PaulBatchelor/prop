@@ -6,22 +6,24 @@ FLEX_FILES=prp.yy.c prp.yy.h
 
 PRP_LIBS=-lfl 
 
+DEBUG_FLAGS=-DDEBUG_BISON
+
 default: prp
 
 %.o: %.c %.h
-	gcc -c $< 
+	gcc -c $(DEBUG_FLAGS) $< 
 
 testing: testing.c $(OBJS)
-	gcc $<  $(OBJS) -o $@
+	gcc $<  $(OBJS)  -o $@
 
 prp.tab.c: prp.y
-	bison -d prp.y 
+	bison -d  prp.y 
 
 prp.yy.c: prp.l prp.tab.c 
 	flex -o prp.yy.c --header-file=prp.yy.h prp.l
 
 prp: $(OBJS) $(FLEX_FILES) $(FLEX_OBJS)
-	gcc $(OBJS) $(FLEX_OBJS) $(PRP_LIBS) -o prp 
+	gcc $(OBJS) $(FLEX_OBJS) $(PRP_LIBS)  -o prp 
 
 all: nrt
 
