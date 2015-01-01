@@ -1,7 +1,7 @@
 .PHONY: default all clean
 
-OBJS=main.o prp.yy.o prp_parser.o
-
+FLEX_OBJS= prp.yy.o prp.tab.o prp_parser.o 
+OBJS=main.o 
 FLEX_FILES=prp.yy.c prp.yy.h
 
 PRP_LIBS=-lfl 
@@ -14,11 +14,14 @@ default: prp
 testing: testing.c $(OBJS)
 	gcc $<  $(OBJS) -o $@
 
-prp.yy.c: prp.l
+prp.tab.c: prp.y
+	bison -d prp.y 
+
+prp.yy.c: prp.l prp.tab.c 
 	flex -o prp.yy.c --header-file=prp.yy.h prp.l
 
-prp: $(OBJS) $(FLEX_FILES) 
-	gcc $(OBJS) $(PRP_LIBS) -o prp 
+prp: $(OBJS) $(FLEX_FILES) $(FLEX_OBJS)
+	gcc $(OBJS) $(FLEX_OBJS) $(PRP_LIBS) -o prp 
 
 all: nrt
 

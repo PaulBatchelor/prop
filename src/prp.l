@@ -1,37 +1,47 @@
 %{
 #include <stdio.h>
 #define YY_DECL int yylex()
-
+#include "prp.tab.h"
 %}
 
 %%
 [ \n\t]                  ;
 [0-9]* {
-printf("NUMBER\n");
+//printf("NUMBER\n");
+yylval.ival = atoi(yytext);
+return NUMBER;
 }
 
 \( {
-printf("LPAREN\n");
+//printf("LPAREN\n");
+return LPAREN;
+
 }
 
 \) {
-printf("RPAREN\n");
+//printf("RPAREN\n");
+return RPAREN;
 }
 \+ {
-printf("NOTE\n");
+//printf("NOTE\n");
+return NOTE;
 }
 
 \- {
-printf("REST\n");
+//printf("REST\n");
+return REST;
 }
 
-\{ {
-printf("LBRAC\n");
+[{] {
+//printf("LBRAC\n");
+return LBRAC;
 }
-\} {
-printf("RBRAC\n");
+[}] {
+//printf("RBRAC\n");
+return RBRAC;
 }
 . {
-printf("ERROR\n");
+//printf("ERROR\n");
+return ERROR;
 }
 %%
