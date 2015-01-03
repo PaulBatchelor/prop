@@ -32,8 +32,8 @@ double duration;
 
 typedef struct {
 int foo;
-long res;
-int max_res;
+long mul;
+long lcm;
 int mult_size;
 int data_size;
 int bpm;

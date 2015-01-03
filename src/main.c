@@ -6,7 +6,7 @@ int prp_create(PRP_DATA **d)
     *d = (PRP_DATA *)malloc(sizeof(PRP_DATA));
     PRP_DATA *data;
     data = *d;
-    data->res = 1;
+    data->mul = 1;
     data->mult_size = 1;
     data->data_size = 0;
     data->mult = (long*)malloc(sizeof(long) * PRP_MULT_SIZE);
@@ -14,7 +14,7 @@ int prp_create(PRP_DATA **d)
     //data->data = (long*)malloc(sizeof(long) * PRP_DATA_SIZE);
     data->events = (PRP_EVENT*)malloc(sizeof(PRP_EVENT) * PRP_DATA_SIZE);
     data->events[0].data = -1;
-    data->max_res = 1;
+    data->lcm = 1;
     data->ts = 1.0;
     data->bpm = 120;
     data->duration = 5.0;
@@ -40,7 +40,7 @@ int prp_add(PRP_DATA *d, PRP_EVENT_TYPE type)
    
     d->data_size++;
 
-    d->events[d->data_size - 1].data = d->res;
+    d->events[d->data_size - 1].data = d->mul;
     d->events[d->data_size - 1].type = type;
 
     return 1;
@@ -56,12 +56,12 @@ int prp_mul(PRP_DATA *d, int n)
     d->mult[d->mult_size - 1] = n;
 
     /*TODO fix LCM algorithm issue */
-    //if(d->res % n != 0) {
+    //if(d->mul % n != 0) {
         prp_genres(d);
     //}
-    //if(d->max_res % n != 0){
-        d->max_res *= n;
-    //}
+    if(d->lcm % d->mul != 0){
+        d->lcm *= n;
+    }
     return 1;
 }
 int prp_return(PRP_DATA *d)
@@ -74,12 +74,12 @@ int prp_return(PRP_DATA *d)
 int prp_genres(PRP_DATA *d)
 {
     int i;
-    d->res = 1;
+    d->mul = 1;
     for(i = 0; i < d->mult_size; i++)
     {
-        d->res *= d->mult[i];
+        d->mul *= d->mult[i];
     }
-    if(d->res > d->max_res) d->max_res = d->res;
+    if(d->mul > d->lcm) d->lcm = d->mul;
     return 1;
 }
 
@@ -88,7 +88,7 @@ int prp_process(PRP_DATA *d)
     int i;
     for(i = 0; i < d->data_size; i++)
     {
-        d->events[i].data = d->max_res / d->events[i].data;
+        d->events[i].data = d->lcm / d->events[i].data;
     }
     return 1;
 }
