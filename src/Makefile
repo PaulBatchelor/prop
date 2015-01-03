@@ -26,7 +26,7 @@ testing/test_main: testing/test_main.c $(OBJS)
 	gcc $<  $(OBJS)  -o $@
 
 testing/test_gen_ps: testing/test_gen_ps.c $(OBJS)
-	gcc $<  $(PS_OBJS)  -o $@
+	gcc $<  $(PS_OBJS)  -o $@ $(OBJS) $(PRP_LIBS)
 
 prp.tab.c: prp.y
 	bison -d  prp.y 
@@ -40,7 +40,7 @@ prp: $(PRP_OBJS) $(FLEX_FILES)
 all: prp
 
 clean: 
-	rm -rf $(PRP_OBJS) prp prp.yy.* $(FLEX_FILES) 
+	rm -rf $(PRP_OBJS) prp prp.yy.* $(FLEX_FILES) $(TESTS)
 
 uninstall:
 	rm -rf /usr/local/bin/prp
