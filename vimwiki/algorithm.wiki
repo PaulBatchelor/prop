@@ -1,0 +1,89 @@
+The algorithm used in prop is a relatively straightforward one, best explained 
+by examining a string prop code. 
+
+A good piece of example code can be found here: 
+
++ + 3(+ - +) 2(- 3(+ + +)) 3(+ +) + 4(+ +)
+
+When this string is parsed, it executes a list of commands like this:
+
+ADD_NOTE
+ADD_NOTE
+
+MUL(3)
+ADD_NOTE
+ADD_REST
+ADD_NOTE
+RETURN
+
+MUL(2)
+ADD_REST
+MUL(3)
+ADD_NOTE
+ADD_NOTE
+ADD_NOTE
+RETURN
+RETURN
+
+MUL(3)
+ADD_NOTE
+ADD_NOTE
+RETURN
+
+ADD_NOTE
+
+MUL(4)
+ADD_NOTE
+ADD_NOTE
+RETURN
+
+
+These are what each command does:
+
+ADD_NOTE: 
+Multiplies every value in the MULT stack, and returns this value to the EVENTS
+stack as a type NOTE.
+
+ADD_REST: 
+Multiplies every value in the MULT stack, and returns this value to the EVENTS
+stack as a type REST.
+
+MUL(N):
+Adds value N to the MULT stack and recalculates Least Common Multiple (LCM),
+if necessary.
+
+RETURN
+Takes the last value off the MULT stack. 
+
+This table that describes the index and value of each event, the LCM when the event
+was added, what the values on the MULT stack were.
+
+*index  lcm  mult   val*
+0       1    1      1
+1       1    1      1
+2       3    1,3    3
+3       3    1,3    3
+4       3    1,3    3
+5       6    1,2    2
+6       6    1,2,3  6
+7       6    1,2,3  6
+8       6    1,2,3  6
+9       6    1,3    3
+10      6    1,3    3
+11      6    1      1
+12      24   1,4    4
+13      24   1,4    4
+
+There is a set of 14 numbers which are:
+(1 1 3 3 3 2 6 6 6 3 3 1 4 4)
+
+And the LCM of these numbers, which is 24.
+
+At the moment, these numbers are inversely proportional to their duration. The larger
+the number, the smaller the duration. To correct this, each value N must be put
+through the equation LCM/N: this gives us following set of numbers:
+
+(24 24 8 8 8 12 4 4 4 8 8 24 6 6)
+
+This set of floating numbers can now be scaled by a floating point to fit a desired
+range.
