@@ -3,11 +3,11 @@
 #include "gen_ps.h"
 
 
-void prp_set_rgb(PRP_COLOR *c, char r, char g, char b)
+void prp_set_rgb(PRP_COLOR *c, double r, double g, double b)
 {
-    c->r = (r == 0) ? 0 : r / 255.0; 
-    c->g = (g == 0) ? 0 : g / 255.0; 
-    c->b = (b == 0) ? 0 : b / 255.0; 
+    c->r = (r == 0) ? 0 : 1.0 * r / 255.0; 
+    c->g = (g == 0) ? 0 : 1.0 * g / 255.0; 
+    c->b = (b == 0) ? 0 : 1.0 * b / 255.0; 
 }
 
 int prp_init_ps_options(PRP_PS_OPTIONS *p)
@@ -40,12 +40,13 @@ int prp_gen_ps(PRP_DATA *d, PRP_PS_OPTIONS *p)
     }
 
     fprintf(fp,"%!PS\n");
-    fprintf(fp,"%%BoundingBox: 0 0 %d %d\n", p->w, p->h);
+    fprintf(fp,"%%%BoundingBox: 0 0 %d %d\n", p->w, p->h);
     fprintf(fp,"/lineWidth %d def\n", lwidth);
     fprintf(fp,"/line\n");
+    fprintf(fp,"{\n");
     fprintf(fp,"newpath\n");
     fprintf(fp,"0 0 moveto\n");
-    fprintf(fp,"0 lineWidth lineto\n");
+    fprintf(fp,"0 %d lineto\n", lwidth);
     fprintf(fp,"}def \n");
     fprintf(fp,"2 setlinewidth \n");
     fprintf(fp,"%d %d translate\n", p->border, p->border);
@@ -53,16 +54,19 @@ int prp_gen_ps(PRP_DATA *d, PRP_PS_OPTIONS *p)
     for(i = 0; i < d->data_size; i++)
     {
         if(d->events[i].type == PRP_NOTE) {
-            fprintf(fp, "%d %g %g %g setrgbcolor\n", d->events[i].type,
+            fprintf(fp, "%g %g %g setrgbcolor\n", 
                     p->line_color.r, p->line_color.g, p->line_color.b);
         }else{
-            fprintf(fp, "%d %g %g %g setrgbcolor\n", d->events[i].type,
+            fprintf(fp, "%g %g %g setrgbcolor\n", 
                     p->line_faded_color.r, p->line_faded_color.g, 
                     p->line_faded_color.b);
         }
+
+            fprintf(fp, "line stroke\n");
+            fprintf(fp, "%g 0 translate\n", floor(incr * d->events[i].data));
        
     }
-
+    fprintf(fp, "showpage\n");
     fclose(fp);
     return 1;
 }

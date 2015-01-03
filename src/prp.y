@@ -61,7 +61,6 @@ init : LBRAC {
     fprintf(stderr,"INIT\n");
 };
 end : RBRAC { 
-    prp_destroy(&PRP_GD); 
     if(DEBUG_BISON)
     fprintf(stderr,"END\n");
 };

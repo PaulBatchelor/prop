@@ -127,14 +127,3 @@ int prp_print(PRP_DATA *d)
         t += dur;
     }
 }
-int prp_create_user_options(PRP_USER_OPTIONS *u)
-{
-    u->user_ts = FALSE;
-    u->user_duration = FALSE;
-}
-int prp_init_with_options(PRP_DATA *d, PRP_USER_OPTIONS *u)
-{
-    if(u->user_ts == TRUE) { d->ts = u->ts; }
-    if(u->user_duration == TRUE) { d->duration = u->duration; }
-    return 1;
-}

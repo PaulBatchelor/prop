@@ -5,13 +5,13 @@ PS_OBJS= gen_ps.o
 
 OBJS=main.o 
 
-TESTS=testing/test_main
+TESTS=testing/test_main testing/test_gen_ps
 
 PRP_OBJS= $(OBJS) $(FLEX_OBJS) $(PS_OBJS)
 
 FLEX_FILES=prp.yy.c prp.yy.h
 
-PRP_LIBS=-lfl 
+PRP_LIBS=-lfl -lm
 
 DEBUG_FLAGS=-DDEBUG_BISON=0
 
@@ -24,6 +24,9 @@ testing: $(TESTS)
 
 testing/test_main: testing/test_main.c $(OBJS)
 	gcc $<  $(OBJS)  -o $@
+
+testing/test_gen_ps: testing/test_gen_ps.c $(OBJS)
+	gcc $<  $(PS_OBJS)  -o $@
 
 prp.tab.c: prp.y
 	bison -d  prp.y 

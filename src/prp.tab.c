@@ -1441,7 +1441,6 @@ yyreduce:
 /* Line 1810 of yacc.c  */
 #line 63 "prp.y"
     { 
-    prp_destroy(&PRP_GD); 
     if(DEBUG_BISON)
     fprintf(stderr,"END\n");
 }
@@ -1450,7 +1449,7 @@ yyreduce:
 
 
 /* Line 1810 of yacc.c  */
-#line 1454 "prp.tab.c"
+#line 1453 "prp.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1681,7 +1680,7 @@ yyreturn:
 
 
 /* Line 2071 of yacc.c  */
-#line 69 "prp.y"
+#line 68 "prp.y"
 
 
 void yyerror(const char *s)
