@@ -1,12 +1,18 @@
-.PHONY: default all clean
+.PHONY: default all clean install uninstall
 
-FLEX_OBJS= prp.yy.o prp.tab.o prp_parser.o 
+FLEX_OBJS= prp.yy.o prp.tab.o parser.o 
+PS_OBJS= gen_ps.o
+
 OBJS=main.o 
+
+
+PRP_OBJS= $(OBJS) $(FLEX_OBJS) $(PS_OBJS)
+
 FLEX_FILES=prp.yy.c prp.yy.h
 
 PRP_LIBS=-lfl 
 
-DEBUG_FLAGS=-DDEBUG_BISON
+DEBUG_FLAGS=-DDEBUG_BISON=0
 
 default: prp
 
@@ -22,10 +28,16 @@ prp.tab.c: prp.y
 prp.yy.c: prp.l prp.tab.c 
 	flex -o prp.yy.c --header-file=prp.yy.h prp.l
 
-prp: $(OBJS) $(FLEX_FILES) $(FLEX_OBJS)
-	gcc $(OBJS) $(FLEX_OBJS) $(PRP_LIBS)  -o prp 
+prp: $(PRP_OBJS) $(FLEX_FILES) 
+	gcc $(PRP_OBJS) $(PRP_LIBS)  -o prp 
 
-all: nrt
+all: prp
 
 clean: 
-	rm -rf $(OBJS) testing prp prp.yy.* $(FLEX_FILES)
+	rm -rf $(PRP_OBJS) testing prp prp.yy.* $(FLEX_FILES)
+
+uninstall:
+	rm -rf /usr/local/bin/prp
+
+install:
+	cp prp /usr/local/bin/

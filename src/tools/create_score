@@ -1,0 +1,11 @@
+#!/bin/sh
+TEMPO=120
+NUMBEATS=4
+#PHRASE="+ 2(+ 2(+ 3(+++))) 2(- +) 4(-+-4(++++))"
+#PHRASE="+ 4(+ +) 2(+) 4(+--+--+-)"
+PHRASE="+ - 2(+ 3(+ + +)) 5(+++++)"
+
+
+echo "{$PHRASE}" | prp -d $NUMBEATS |\
+    awk -vTEMPO=$TEMPO 'BEGIN{ts = 60/TEMPO} {print "i1",$1*ts,$2*ts}' |\
+    csound snare.csd

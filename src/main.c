@@ -11,18 +11,20 @@ int prp_create(PRP_DATA **d)
     data->data_size = 0;
     data->mult = (long*)malloc(sizeof(long) * PRP_MULT_SIZE);
     data->mult[0] = 1;
-    data->data = (long*)malloc(sizeof(long) * PRP_DATA_SIZE);
+    //data->data = (long*)malloc(sizeof(long) * PRP_DATA_SIZE);
     data->events = (PRP_EVENT*)malloc(sizeof(PRP_EVENT) * PRP_DATA_SIZE);
-    data->data[0] = -1;
+    data->events[0].data = -1;
     data->max_res = 1;
     data->ts = 1.0;
     data->bpm = 120;
+    data->duration = 5.0;
+    data->total_dur = 0.0;
     return 1;
 }
 int prp_destroy(PRP_DATA **d)
 {
     free((*d)->mult);
-    free((*d)->data);
+    //free((*d)->data);
     free((*d)->events);
     free(*d);
     return 1;
@@ -38,7 +40,6 @@ int prp_add(PRP_DATA *d, PRP_EVENT_TYPE type)
    
     d->data_size++;
 
-    d->data[d->data_size - 1] = d->res;
     d->events[d->data_size - 1].data = d->res;
     d->events[d->data_size - 1].type = type;
 
@@ -54,12 +55,13 @@ int prp_mul(PRP_DATA *d, int n)
     d->mult_size++;
     d->mult[d->mult_size - 1] = n;
 
-    if(d->res % n != 0) {
+    /*TODO fix LCM algorithm issue */
+    //if(d->res % n != 0) {
         prp_genres(d);
-    }
-    if(d->max_res % n != 0){
+    //}
+    //if(d->max_res % n != 0){
         d->max_res *= n;
-    }
+    //}
     return 1;
 }
 int prp_return(PRP_DATA *d)
@@ -86,7 +88,18 @@ int prp_process(PRP_DATA *d)
     int i;
     for(i = 0; i < d->data_size; i++)
     {
-        d->data[i] = d->max_res / d->data[i];
+        d->events[i].data = d->max_res / d->events[i].data;
+    }
+    return 1;
+}
+
+int prp_calc_totaldur(PRP_DATA *d)
+{
+    d->total_dur = 0;
+    int i;
+    for(i = 0; i < d->data_size; i++)
+    {
+        d->total_dur += d->events[i].data;
     }
     return 1;
 }
@@ -96,19 +109,32 @@ int prp_print(PRP_DATA *d)
     double t = 0;
     int i;
     double dur;
-    double totalDur = 0;
-    /* get total sum of dur */
-    /* TODO MOVE SOMEWHERE ELSE */
-    //for(i = 0; i < d->data_size; i++)
-    //{
-    //    totalDur += d->data[i];
-    //}
-    //
-    //d->ts = 5.0 / totalDur;
+
+    prp_calc_totaldur(d); /* call this function before calculating timescale */
+    if(d->total_dur > 0)
+    {
+    d->ts = d->duration / d->total_dur;
+    }else
+    {
+    fprintf(stderr, "WARNING: total_dur is zero!\n");
+    }
     for(i = 0; i < d->data_size; i++)
     {
-        dur = d->data[i] * d->ts;
-        fprintf(stdout, "%g %g\n", t, dur);
+        dur = d->events[i].data * d->ts;
+        if(d->events[i].type != PRP_REST) {
+            fprintf(stdout, "%g %g\n", t, dur);
+        }
         t += dur;
     }
+}
+int prp_create_user_options(PRP_USER_OPTIONS *u)
+{
+    u->user_ts = FALSE;
+    u->user_duration = FALSE;
+}
+int prp_init_with_options(PRP_DATA *d, PRP_USER_OPTIONS *u)
+{
+    if(u->user_ts == TRUE) { d->ts = u->ts; }
+    if(u->user_duration == TRUE) { d->duration = u->duration; }
+    return 1;
 }

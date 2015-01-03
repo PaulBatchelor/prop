@@ -1,5 +1,11 @@
 #include "main.h"
 
+
+void prp_error(const char *str)
+{
+    fprintf(stderr, "\x1b[31;1m%s\x1b[0m\n", str);
+}
+
 int test_1(PRP_DATA *d)
 {
     /* 
@@ -41,10 +47,10 @@ int test_1(PRP_DATA *d)
     }
     for(i = 0; i < ref_ds; i++)
     {
-        if(d->data[i] != ref[i])
+        if(d->events[i].data != ref[i])
         {
             fprintf(stderr, "ERROR: position a position %d (%d) does not match reference (%d)\n",
-                    i, d->data[i], ref[i]);
+                    i, d->events[i].data, ref[i]);
             data_error = 1;
         }
     }
@@ -60,7 +66,7 @@ int test_1(PRP_DATA *d)
         fprintf(stderr, "\ngen: ");
         for(i = 0; i < ref_ds; i++)
         {
-            fprintf(stderr, "%d ", d->data[i]);
+            fprintf(stderr, "%d ", d->events[i].data);
         }
         fprintf(stderr, "\n");
 
@@ -112,10 +118,10 @@ int test_2(PRP_DATA *d)
     }
     for(i = 0; i < 10; i++)
     {
-        if(d->data[i] != ref[i])
+        if(d->events[i].data != ref[i])
         {
             fprintf(stderr, "ERROR: position a position %d (%d) does not match reference (%d)\n",
-                    i, d->data[i], ref[i]);
+                    i, d->events[i].data, ref[i]);
             data_error = 1;
         }
     }
@@ -131,7 +137,7 @@ int test_2(PRP_DATA *d)
         fprintf(stderr, "\ngen: ");
         for(i = 0; i < 10; i++)
         {
-            fprintf(stderr, "%d ", d->data[i]);
+            fprintf(stderr, "%d ", d->events[i].data);
         }
         fprintf(stderr, "\n");
 
@@ -183,10 +189,10 @@ int test_prp_process(PRP_DATA *d)
     
     for(i = 0; i < 10; i++)
     {
-        if(d->data[i] != ref[i])
+        if(d->events[i].data != ref[i])
         {
             fprintf(stderr, "ERROR: position a position %d (%d) does not match reference (%d)\n",
-                    i, d->data[i], ref[i]);
+                    i, d->events[i].data, ref[i]);
             data_error = 1;
         }
     }
@@ -202,7 +208,7 @@ int test_prp_process(PRP_DATA *d)
         fprintf(stderr, "\ngen: ");
         for(i = 0; i < 10; i++)
         {
-            fprintf(stderr, "%d ", d->data[i]);
+            fprintf(stderr, "%d ", d->events[i].data);
         }
         fprintf(stderr, "\n");
 
@@ -223,7 +229,7 @@ int test_prp_create(PRP_DATA *d)
 {
     /* make sure everything is initialized properly */
 
-    fprintf(stderr,"Testing prp_create()... ");
+    fprintf(stderr,"Testing prp_create()...");
     prp_create(&d);
     if(d->res != 1) {
         fprintf(stderr, "ERROR: res is initialized at %d, when it should be 1\n",
@@ -242,9 +248,9 @@ int test_prp_create(PRP_DATA *d)
                 d->mult[0]);
         return 0;
     }
-    if(d->data[0] != -1) {
+    if(d->events[0].data != -1) {
         fprintf(stderr, "ERROR: index 0 of data is initialized at %d, when it should be -1\n",
-                d->data[0]);
+                d->events[0].data);
         return 0;
     }
     if(d->max_res != 1) {
@@ -270,6 +276,12 @@ int test_prp_create(PRP_DATA *d)
                 d->bpm );
         return 0;
     }
+    
+    if(d->duration != 5.0) {
+        fprintf(stderr, "ERROR: duration is initialized at %g, when it should be 5.0\n",
+                d->duration);
+        return 0;
+    }
 
     prp_destroy(&d);
 
@@ -283,9 +295,9 @@ int test_prp_add(PRP_DATA *d)
     fprintf(stderr,"Testing prp_add()... ");
     prp_create(&d);
     prp_add_note(d);
-    if(d->data[0] != 1) {
+    if(d->events[0].data != 1) {
         fprintf(stderr, "ERROR: prp_data should now be 1, but it is %d instead\n",
-                d->data[0]);
+                d->events[0].data);
         prp_destroy(&d);
         return 0;
     }
@@ -384,50 +396,50 @@ int main()
     if(test_prp_create(d)){
         fprintf(stderr,"prp_create() passed!\n");    
     }else{
-        fprintf(stderr,"prp_create() failed!\n");    
+        prp_error("prp_create() failed!\n");    
     }
     
     if(test_prp_add(d)){
         fprintf(stderr,"prp_add() passed!\n");    
     }else{
-        fprintf(stderr,"prp_add() failed!\n");    
+        prp_error("prp_add() failed!\n");    
     }
     if(test_prp_mul(d)){
         fprintf(stderr,"prp_mul() passed!\n");    
     }else{
-        fprintf(stderr,"prp_mul() failed!\n");    
+        prp_error("prp_mul() failed!\n");    
     }
     
     if(test_prp_return(d)){
         fprintf(stderr,"prp_return() passed!\n");    
     }else{
-        fprintf(stderr,"prp_return() failed!\n");    
+        prp_error("prp_return() failed!\n");    
     }
     
     if(test_1(d)){
         fprintf(stderr,"Test 1 passed!\n");    
     }else{
-        fprintf(stderr,"Test 1 failed!\n");    
+        prp_error("Test 1 failed!\n");    
     }
     
     if(test_2(d)){
         fprintf(stderr,"Test 2 passed!\n");    
     }else{
-        fprintf(stderr,"Test 2 failed!\n");    
+        prp_error("Test 2 failed!\n");    
     }
     
     if(test_prp_process(d)){
         fprintf(stderr,"prp_process() passed!\n");    
     }else{
-        fprintf(stderr,"prp_process() failed!\n");    
+        prp_error("prp_process() failed!\n");    
     }
     
     if(test_prp_print(d)){
         fprintf(stderr,"prp_print() passed!\n");    
+        
     }else{
-        fprintf(stderr,"prp_print() failed!\n");    
+        prp_error("prp_print() failed!\n");    
     }
 
     return 0;
 }
-
