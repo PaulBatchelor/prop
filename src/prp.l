@@ -3,12 +3,12 @@
 #define YY_DECL int yylex()
 #include "prp.tab.h"
 %}
-
+%option noyywrap
 %%
 [ \n\t]                  ;
 [0-9]* {
 //printf("NUMBER\n");
-yylval.ival = atoi(yytext);
+prplval.ival = atoi(yytext);
 return NUMBER;
 }
 

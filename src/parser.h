@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#define PRP_PARSER_INIT prp_create_user_options(&PRP_UO)
+#define PRP_PARSER_INIT prp_create_user_options(&PRP_UO); prp_create(&PRP_GD)
 #define PRP_PARSER_DESTROY prp_create_user_options(&PRP_UO); prp_destroy(&PRP_GD)
 #define prp_setvar(var,val) PRP_UO.var = val
 #define GEN_PS(var) if(PRP_UO.write_ps) prp_gen_ps(PRP_GD, var)
 
-int yylex();
-int yyparse(void);
-void yyerror(const char *s);
-FILE *yyin;
+int prplex();
+int prpparse(void);
+void prperror(const char *s);
+FILE *prpin;
 
 typedef struct {
 int user_ts;

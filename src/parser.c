@@ -31,8 +31,8 @@ int main(int argc, char **argv)
     }
     }
     do{
-        yyparse();
-    }while(!feof(yyin)) ;
+        prpparse();
+    }while(!feof(prpin)) ;
     prp_process(PRP_GD);
     prp_print(PRP_GD); 
     //prp_gen_ps(PRP_GD, &p);

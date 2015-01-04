@@ -55,7 +55,8 @@ event_note: NOTE {
     fprintf(stderr,"ADD_NOTE\n");
 };
 init : LBRAC { 
-    prp_create(&PRP_GD); 
+    //prp_create(&PRP_GD); 
+    prp_init(PRP_GD);
     prp_init_with_options(PRP_GD, &PRP_UO);
     if(DEBUG_BISON)
     fprintf(stderr,"INIT\n");

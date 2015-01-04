@@ -61,6 +61,14 @@
 /* Using locations.  */
 #define YYLSP_NEEDED 0
 
+/* Substitute the variable and function names.  */
+#define yyparse         prpparse
+#define yylex           prplex
+#define yyerror         prperror
+#define yylval          prplval
+#define yychar          prpchar
+#define yydebug         prpdebug
+#define yynerrs         prpnerrs
 
 
 /* Copy the first part of user declarations.  */
@@ -73,7 +81,7 @@
 
 
 /* Line 268 of yacc.c  */
-#line 77 "prp.tab.c"
+#line 85 "prp.tab.c"
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -134,7 +142,7 @@ char *sval;
 
 
 /* Line 295 of yacc.c  */
-#line 138 "prp.tab.c"
+#line 146 "prp.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -146,7 +154,7 @@ char *sval;
 
 
 /* Line 345 of yacc.c  */
-#line 150 "prp.tab.c"
+#line 158 "prp.tab.c"
 
 #ifdef short
 # undef short
@@ -439,7 +447,7 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    22,    22,    25,    25,    26,    26,    27,    27,    27,
-      30,    30,    33,    33,    36,    41,    47,    52,    57,    63
+      30,    30,    33,    33,    36,    41,    47,    52,    57,    64
 };
 #endif
 
@@ -1429,7 +1437,8 @@ yyreduce:
 /* Line 1810 of yacc.c  */
 #line 57 "prp.y"
     { 
-    prp_create(&PRP_GD); 
+    //prp_create(&PRP_GD); 
+    prp_init(PRP_GD);
     prp_init_with_options(PRP_GD, &PRP_UO);
     if(DEBUG_BISON)
     fprintf(stderr,"INIT\n");
@@ -1439,7 +1448,7 @@ yyreduce:
   case 19:
 
 /* Line 1810 of yacc.c  */
-#line 63 "prp.y"
+#line 64 "prp.y"
     { 
     if(DEBUG_BISON)
     fprintf(stderr,"END\n");
@@ -1449,7 +1458,7 @@ yyreduce:
 
 
 /* Line 1810 of yacc.c  */
-#line 1453 "prp.tab.c"
+#line 1462 "prp.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1680,7 +1689,7 @@ yyreturn:
 
 
 /* Line 2071 of yacc.c  */
-#line 68 "prp.y"
+#line 69 "prp.y"
 
 
 void yyerror(const char *s)

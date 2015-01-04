@@ -40,6 +40,7 @@ PRP_DATA *PRP_GD;
 
 
 int prp_create(PRP_DATA **d);
+int prp_init(PRP_DATA *d);
 int prp_destroy(PRP_DATA **d);
 int prp_add(PRP_DATA *d, PRP_EVENT_TYPE type);
 int prp_mul(PRP_DATA *d, int n);

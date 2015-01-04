@@ -20,6 +20,9 @@ default: prp
 %.o: %.c %.h
 	gcc -c $(DEBUG_FLAGS) $< 
 
+prp.tab.o: prp.tab.c prp.tab.h
+	gcc -c $(DEBUG_FLAGS) $< 
+
 testing: $(TESTS)
 
 testing/test_main: testing/test_main.c $(OBJS)
@@ -29,10 +32,10 @@ testing/test_gen_ps: testing/test_gen_ps.c $(OBJS)
 	gcc $<  $(PS_OBJS)  -o $@ $(OBJS) $(PRP_LIBS)
 
 prp.tab.c: prp.y
-	bison -d  prp.y 
+	bison -p prp -d prp.y 
 
 prp.yy.c: prp.l prp.tab.c 
-	flex -o prp.yy.c --header-file=prp.yy.h prp.l
+	flex -P prp -o prp.yy.c --header-file=prp.yy.h prp.l
 
 prp: $(PRP_OBJS) $(FLEX_FILES) 
 	gcc $(PRP_OBJS) $(PRP_LIBS)  -o prp 
@@ -40,7 +43,7 @@ prp: $(PRP_OBJS) $(FLEX_FILES)
 all: prp
 
 clean: 
-	rm -rf $(PRP_OBJS) prp prp.yy.* $(FLEX_FILES) $(TESTS)
+	rm -rf $(PRP_OBJS) prp prp.yy.* prp.tab.* $(FLEX_FILES) $(TESTS)
 
 uninstall:
 	rm -rf /usr/local/bin/prp

@@ -19,6 +19,7 @@ int test_1(PRP_DATA *d)
 
     fprintf(stderr,"Testing 1... ");
     prp_create(&d);
+    prp_init(d);
     prp_add_note(d);
     prp_mul(d, 4);
         prp_add_note(d);
@@ -87,6 +88,7 @@ int test_2(PRP_DATA *d)
     
     fprintf(stderr,"Testing 2... ");
     prp_create(&d);
+    prp_init(d);
     prp_add_note(d);
     prp_add_note(d);
     prp_mul(d,3);
@@ -161,6 +163,7 @@ int test_prp_process(PRP_DATA *d)
     long ref[] = {6, 6, 2, 2, 2, 3, 3, 1, 1, 1};
     
     prp_create(&d);
+    prp_init(d);
     /*should be identical to test_1 code*/ 
     prp_add_note(d);
     prp_add_note(d);
@@ -220,12 +223,13 @@ int test_prp_free(PRP_DATA *d)
     /* simple create and destroy */
 }
 
-int test_prp_create(PRP_DATA *d)
+int test_prp_init(PRP_DATA *d)
 {
     /* make sure everything is initialized properly */
 
     fprintf(stderr,"Testing prp_create()...");
     prp_create(&d);
+    prp_init(d);
     if(d->mul != 1) {
         fprintf(stderr, "ERROR: res is initialized at %d, when it should be 1\n",
                 d->mul);
@@ -289,6 +293,7 @@ int test_prp_add(PRP_DATA *d)
 
     fprintf(stderr,"Testing prp_add()... ");
     prp_create(&d);
+    prp_init(d);
     prp_add_note(d);
     if(d->events[0].data != 1) {
         fprintf(stderr, "ERROR: prp_data should now be 1, but it is %d instead\n",
@@ -313,6 +318,7 @@ int test_prp_mul(PRP_DATA *d)
     */
     fprintf(stderr,"Testing prp_mul()... ");
     prp_create(&d);
+    prp_init(d);
     prp_mul(d, 4);
     prp_return(d);
     prp_mul(d, 2);
@@ -334,6 +340,7 @@ int test_prp_return(PRP_DATA *d)
     fprintf(stderr,"Testing prp_return()... ");
 
     prp_create(&d);
+    prp_init(d);
     /*create multiplier of 2*/
     prp_mul(d, 2);
     /*create multiplier of 3*/
@@ -366,6 +373,7 @@ int test_prp_print(PRP_DATA *d)
     fprintf(stderr,"Testing prp_print()... \n");
     fprintf(stderr,"Using expression {+ + 3(+ + +) 2(+ + 3(+ + +))}\n");
     prp_create(&d);
+    prp_init(d);
     prp_add_note(d);
     prp_add_note(d);
     prp_mul(d,3);
@@ -393,10 +401,10 @@ int main()
 {
     PRP_DATA *d;
     
-    if(test_prp_create(d)){
-        prp_success("prp_create() passed!\n");    
+    if(test_prp_init(d)){
+        prp_success("prp_init() passed!\n");    
     }else{
-        prp_error("prp_create() failed!\n");    
+        prp_error("prp_init() failed!\n");    
     }
     
     if(test_prp_add(d)){

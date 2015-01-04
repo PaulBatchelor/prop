@@ -4,23 +4,26 @@
 int prp_create(PRP_DATA **d)
 {
     *d = (PRP_DATA *)malloc(sizeof(PRP_DATA));
-    PRP_DATA *data;
-    data = *d;
-    data->mul = 1;
-    data->mult_size = 1;
-    data->data_size = 0;
-    data->mult = (long*)malloc(sizeof(long) * PRP_MULT_SIZE);
-    data->mult[0] = 1;
-    //data->data = (long*)malloc(sizeof(long) * PRP_DATA_SIZE);
-    data->events = (PRP_EVENT*)malloc(sizeof(PRP_EVENT) * PRP_DATA_SIZE);
-    data->events[0].data = -1;
-    data->lcm = 1;
-    data->ts = 1.0;
-    data->bpm = 120;
-    data->duration = 5.0;
-    data->total_dur = 0.0;
     return 1;
 }
+
+int prp_init(PRP_DATA *d)
+{
+    d->mul = 1;
+    d->mult_size = 1;
+    d->data_size = 0;
+    d->mult = (long*)malloc(sizeof(long) * PRP_MULT_SIZE);
+    d->mult[0] = 1;
+    d->events = (PRP_EVENT*)malloc(sizeof(PRP_EVENT) * PRP_DATA_SIZE);
+    d->events[0].data = -1;
+    d->lcm = 1;
+    d->ts = 1.0;
+    d->bpm = 120;
+    d->duration = 5.0;
+    d->total_dur = 0.0;
+    return 1;
+}
+
 int prp_destroy(PRP_DATA **d)
 {
     free((*d)->mult);
