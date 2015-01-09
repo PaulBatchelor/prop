@@ -43,7 +43,7 @@ prp: $(PRP_OBJS) $(FLEX_FILES)
 all: prp
 
 clean: 
-	rm -rf $(PRP_OBJS) prp prp.yy.* prp.tab.* $(FLEX_FILES) $(TESTS)
+	rm -rf $(PRP_OBJS) prp prop.yy.* prop.tab.* $(FLEX_FILES) $(TESTS)
 
 uninstall:
 	rm -rf /usr/local/bin/prp

@@ -13,7 +13,7 @@ void prp_set_rgb(PRP_COLOR *c, double r, double g, double b)
 int prp_init_ps_options(PRP_PS_OPTIONS *p)
 {
     prp_set_rgb(&p->line_color, 0, 0, 0);
-    prp_set_rgb(&p->line_faded_color, 220, 220, 220);
+    prp_set_rgb(&p->line_faded_color, 245, 245, 245);
     prp_set_rgb(&p->bg_color, 255, 255, 255);
     /* TODO be sure to free this */
     asprintf(&p->filename, "out.ps");
@@ -63,7 +63,8 @@ int prp_gen_ps(PRP_DATA *d, PRP_PS_OPTIONS *p)
         }
 
             fprintf(fp, "line stroke\n");
-            fprintf(fp, "%g 0 translate\n", floor(incr * d->events[i].data));
+            fprintf(fp, "%g 0 translate\n", ceil(incr * d->events[i].data));
+            //fprintf(fp, "%g 0 translate\n", incr * d->events[i].data);
        
     }
     fprintf(fp, "showpage\n");

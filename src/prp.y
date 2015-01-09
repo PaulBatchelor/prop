@@ -70,6 +70,6 @@ end : RBRAC {
 
 void yyerror(const char *s)
 {
-    fprintf(stderr, "%s: sorry this can't be more useful\n", s);
-    prp_destroy(&PRP_GD); 
+    fprintf(stderr, "%s: sorry this useful yet\n", s);
+    //prp_destroy(&PRP_GD); 
 }
