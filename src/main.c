@@ -38,7 +38,7 @@ int prp_add(PRP_DATA *d, PRP_EVENT_TYPE type)
     if(d->data_size > PRP_DATA_SIZE) 
     {
         fprintf(stderr, "ERROR: stack overflow\n");
-        return 0;
+        exit(1);
     }
    
     d->data_size++;

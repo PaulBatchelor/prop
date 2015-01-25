@@ -4,7 +4,7 @@
 #define FALSE 0
 
 #define PRP_MULT_SIZE 20
-#define PRP_DATA_SIZE 50
+#define PRP_DATA_SIZE 100
 
 
 
